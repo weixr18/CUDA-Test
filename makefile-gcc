@@ -1,0 +1,38 @@
+########################################################################################
+# This is totally bullshit!!! gcc cannot link .lib files, which are actually msvc format!
+# If you want to use gcc, first get all cuda libraries compiled!
+########################################################################################
+
+CC:= mingw-w64-gcc
+NVCC:= nvcc
+INCLUDE:= -I./
+CUDA_LIB:= "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/lib/x64"
+COMPILER_PATH:= "C:Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64"
+LIBS:= -lcuda -lcudart -L$(CUDA_LIB)
+CXXFLAGS:= -Wall -g
+DIR_SRC:= ./src
+DIR_OBJ:= ./obj
+DIR_OBJ_WIN:= .\obj
+TARGET:= test.exe
+OBJECT_NAMES := matrix.o test.o
+OBJECTS := $(addprefix $(DIR_OBJ)/,$(OBJECT_NAMES))
+
+all: $(TARGET)
+
+$(shell mkdir obj)
+
+$(TARGET): $(OBJECTS)
+	$(CC) -o $(TARGET) $(OBJECTS) $(LIBS)
+   
+$(DIR_OBJ)/%.o: $(DIR_SRC)/%.c   
+	$(CC) -c $(CXXFLAGS) $(INCLUDE) $< -o $@
+
+$(DIR_OBJ)/%.o: $(DIR_SRC)/%.cu
+	$(NVCC) -c $(INCLUDE) $< -o $@
+  
+
+.PHONY : clean
+clean:   
+	-del $(DIR_OBJ_WIN)\*.o
+	-del $(TARGET) 
+	rmdir obj
