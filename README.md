@@ -21,3 +21,8 @@ If you are using the msvc compiler (cl.exe) on a Windows system, be sure to spec
 ## Run
 
     ./test.exe
+
+## Sample output
+
+    Parallel compute with CUDA:0.000053s
+    Serial compute with CPU:0.000189s
